@@ -6,13 +6,8 @@ import Navigator, { Types, NavigatorDelegateSelector as DelegateSelector } from 
 import RX = require('reactxp');
 import renderScene from './navigation/Router';
 import { observer, inject } from 'mobx-react';
-import RootStore = require('./stores/RootStore');
 import withStoreProvider = require('./enhancers/withStoreProvider');
 import NavigationStoreInterface = require('./stores/interface/NavigationStoreInterface');
-// enum NavigationRouteId {
-//     MainPanel,
-//     SecondPanel
-// }
 
 const styles = {
     // Standard navigator style should be an object. So we have to disable caching here.
@@ -39,10 +34,6 @@ class App extends RX.Component<any, any> {
     }
 
     render() {
-        // const{navigationStore} = this.props;
-        console.log('====================================');
-        console.log(this.props);
-        console.log('====================================');
         const  {navigationStore}  = this.props;
         return (
             <Navigator
@@ -52,10 +43,6 @@ class App extends RX.Component<any, any> {
                 delegateSelector={ DelegateSelector }
             />
         );
-    }
-
-    private _onNavigatorRef = (navigator: Navigator) => {
-        this._navigator = navigator;
     }
 }
 

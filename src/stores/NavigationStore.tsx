@@ -2,6 +2,7 @@
 import { action, computed, observable } from 'mobx';
 import * as NavigationStoreInterface from './interface/NavigationStoreInterface';
 import Navigator, { Types, NavigatorDelegateSelector as DelegateSelector } from 'reactxp-navigation';
+import * as Routes from './../navigation/Routes';
 
 function getCurrentState(state: any): any {
   const childRoute = state.routes[state.index];
@@ -19,17 +20,6 @@ function getPrevState(state:any):any {
   return childRoutePrev;
 }
 
-
-import MainPanel = require('./../MainPanel');
-import SecondPanel = require('../SecondPanel');
-
-enum NavigationRouteId {
-    MainPanel,
-    SecondPanel
-}
-
-
-
 class NavigationStore implements NavigationStoreInterface.NavigationStoreInterface {
   @observable navigator: any = null;
   @observable currentRouteName: string = '';
@@ -44,27 +34,36 @@ class NavigationStore implements NavigationStoreInterface.NavigationStoreInterfa
   setNavigator = (navigator: Navigator): void => {
     console.log('Set nav: ', navigator)
     this.navigator = navigator;
-    this.resetAndNavigate('A');
+    this.initNavigation();
   }
 
   goBack = (key: string) => {
       this.navigator.pop();
   }
 
-  navigate = (routeName: string) => {
+  navigate = (routeId: Routes.NavigationRouteId) => {
+    console.log('navigate', routeId);
+    
     this.navigator.push({
-      // routeId: NavigationRouteId.SecondPanel,
-      // sceneConfigType: Types.NavigatorSceneConfigType.FloatFromRight
+      routeId: routeId,
+      sceneConfigType: Types.NavigatorSceneConfigType.FloatFromRight
   });
-    this.currentRouteName = routeName;
+    this.currentRouteName = `${routeId}`;
   }
 
-  resetAndNavigate = (routeName: string) => {
+  resetAndNavigate = () => {
     this.navigator.immediatelyResetRouteStack([{
-      routeId: NavigationRouteId.MainPanel,
+      routeId: Routes.NavigationRouteId.Home,
       sceneConfigType: Types.NavigatorSceneConfigType.Fade
   }]);
-    this.currentRouteName = routeName;
+    this.currentRouteName = 'Home';
+  }
+
+  initNavigation = ()=>{
+    this.navigator.immediatelyResetRouteStack([{
+      routeId: Routes.NavigationRouteId.Splash,
+      sceneConfigType: Types.NavigatorSceneConfigType.Fade
+  }]);
   }
 
 
