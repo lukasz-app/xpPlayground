@@ -1,8 +1,8 @@
 // import { NavigationActions, StackActions } from 'react-navigation';
 import { action, computed, observable } from 'mobx';
-import * as NavigationStoreInterface from './interface/NavigationStoreInterface';
 import Navigator, { Types, NavigatorDelegateSelector as DelegateSelector } from 'reactxp-navigation';
 import * as Routes from './../navigation/Routes';
+import * as interfaces from './interfaces'
 
 function getCurrentState(state: any): any {
   const childRoute = state.routes[state.index];
@@ -19,14 +19,13 @@ function getPrevState(state:any):any {
   }
   return childRoutePrev;
 }
-
-class NavigationStore implements NavigationStoreInterface.NavigationStoreInterface {
-  @observable navigator: any = null;
+class NavigationStore implements interfaces.BaseChildStore, interfaces.NavigationStoreInterface {
+  @observable navigator: Navigator = null;
   @observable currentRouteName: string = '';
-  @observable previousRouteName: string = ''
-  rootStore: any;
+  @observable previousRouteName: string = '';
+  rootStore: interfaces.RootStoreInterface;
 
-  constructor(rootStore: any) {
+  constructor(rootStore: interfaces.RootStoreInterface) {
     this.rootStore = rootStore;
   }
 
@@ -43,7 +42,6 @@ class NavigationStore implements NavigationStoreInterface.NavigationStoreInterfa
 
   navigate = (routeId: Routes.NavigationRouteId) => {
     console.log('navigate', routeId);
-    
     this.navigator.push({
       routeId: routeId,
       sceneConfigType: Types.NavigatorSceneConfigType.FloatFromRight
@@ -67,11 +65,11 @@ class NavigationStore implements NavigationStoreInterface.NavigationStoreInterfa
   }
 
 
-  getCurrentRouteName = () =>
-    this.navigator && getCurrentState(this.navigator.state.nav).routeName;
+  // getCurrentRouteName = () =>
+  //   this.navigator && getCurrentState(this.navigator.state.nav).routeName;
 
 
-  getPrevRouteName = () => getPrevState(this.navigator.state.nav).routeName;
+  // getPrevRouteName = () => getPrevState(this.navigator.state.nav).routeName;
 
   @action
   clearStore = () => {

@@ -1,18 +1,21 @@
 // import AppStore from './AppStore';
 // import AuthStore from './AuthStore';
+import AppStore = require('./AppStore');
+import AuthStore = require('./AuthStore');
 import NavigationStore = require('./NavigationStore');
+import * as Interfaces from './interfaces'
 
-const navStore: any = NavigationStore;  
-
-export = class RootStore {
-  stores: {}
+export = class RootStore implements Interfaces.RootStoreInterface {
+  stores: {
+    appStore: Interfaces.AppStoreInterface,
+    authStore: Interfaces.AuthStoreInterface
+    navigationStore: Interfaces.NavigationStoreInterface,
+  };
   constructor() {
-    // this.appStore = new AppStore(this);
-    // this.authStore = new AuthStore(this);
     this.stores = {
-      // appStore: this.appStore,
-      // authStore: this.authStore,
-      navigationStore: new navStore(this),
+      appStore: new AppStore(this),
+      authStore: new AuthStore(this),
+      navigationStore: new NavigationStore(this),
     };
   }
 }
